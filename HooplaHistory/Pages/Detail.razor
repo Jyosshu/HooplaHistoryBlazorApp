@@ -1,0 +1,52 @@
+﻿@page "/Detail/{id}"
+@inject ClassLibrary.ISqlDataAccess _db
+
+
+@if (book is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{    
+
+<div class="container">
+
+    <h3>@book.Title</h3>
+
+    <div class="d-inline-flex">
+        <img src="@book.Image.RemoteUrl" title="@book.Image.AltText"  class="d-inline"/>
+    </div>
+    <div class="d-inline-flex align-top">
+        <ul class="align-text-top" style="list-style-type: none">
+            <li class=" my-1">Author: @book.ArtistName</li>
+            <li class="my-1">Type: @book.Kind.Name</li>
+
+            @foreach (Borrow b in book.Borrows)
+            {
+                <li class="my-1">Borrowed: @b.BorrowedDate</li>
+                <li class="my-1">Returned: @b.ReturnedDate</li>
+            }
+
+        </ul>
+    </div>
+</div>
+}
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    private DigitalBook book;
+
+    protected override async Task OnInitializedAsync()
+    {
+        book = await _db.GetBookById(ParameterParse());
+    }
+
+    private int ParameterParse()
+    {
+        int output = 0;
+        int.TryParse(id, out output);
+        return output;
+    }
+}
