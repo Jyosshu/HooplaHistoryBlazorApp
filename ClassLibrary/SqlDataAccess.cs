@@ -25,6 +25,16 @@ namespace ClassLibrary
             _log = log;
         }
 
+        public async Task<List<Artist>> GetArtists()
+        {
+            string connectionString = _config.GetConnectionString(ConnectionStringName);
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                var data = await connection.QueryAsync<Artist>("SELECT * FROM Artist");
+                return data.ToList();
+            }
+        }
+
         public async Task<List<DigitalBook>> GetBooks()
         {
             string connectionString = _config.GetConnectionString(ConnectionStringName);
