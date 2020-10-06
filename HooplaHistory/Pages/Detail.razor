@@ -20,14 +20,31 @@ else
         <ul class="align-text-top" style="list-style-type: none">
             <li class=" my-1">Author: @book.ArtistName</li>
             <li class="my-1">Type: @book.Kind.Name</li>
-
-            @foreach (Borrow b in book.Borrows)
-            {
-                <li class="my-1">Borrowed: @b.BorrowedDate</li>
-                <li class="my-1">Returned: @b.ReturnedDate</li>
-            }
-
+            <li class="my-1">
+                <a href="@book.RemoteURL" target="_blank">Hoopla Details</a>
+            </li>
+            <li class="my-1">
+                Other books by:
+                <a href="/Author/@book.ArtistName"> @book.ArtistName</a>
+            </li>
         </ul>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <th>Borrowed</th>
+                <th>Returned</th>
+            </thead>
+                <tbody>
+                    @foreach (Borrow b in book.Borrows)
+                    {
+                        <tr>
+                            <td> @b.BorrowedDate </td>
+                            <td> @b.ReturnedDate </td>
+                        </tr>
+                    }
+                </tbody>
+        </table>
     </div>
 </div>
 }

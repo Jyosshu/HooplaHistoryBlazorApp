@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
+using System.IO;
 
 namespace ClassLibrary
 {
@@ -45,12 +46,14 @@ namespace ClassLibrary
         {
             try
             {
+                string remoteUrl = _config["RemoteUrl"];
                 string connectionString = _config.GetConnectionString(ConnectionStringName);
                 using (IDbConnection connection = new SqlConnection(connectionString))
                 {
                     var data = await connection.QueryAsync<DigitalBook, Image, Kind, DigitalBook>(getBooksQuery + " WHERE di.Id = @BookId",
                         map: (digitalBook, image, kind) =>
                         {
+                            digitalBook.RemoteURL = Path.Combine(remoteUrl, digitalBook.TitleId.ToString());
                             digitalBook.Image = image;
                             digitalBook.Kind = kind;
                             return digitalBook;
@@ -77,7 +80,7 @@ namespace ClassLibrary
             // TODO: Sanitize user input string
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                var data = await connection.QueryAsync<DigitalBook, Image, Kind, DigitalBook>(getBooksQuery + " WHERE LEFT((di.ArtistName, @InputLength) = @ArtistName ORDER BY di.id",
+                var data = await connection.QueryAsync<DigitalBook, Image, Kind, DigitalBook>(getBooksQuery + " WHERE LEFT(di.ArtistName, @InputLength) = @ArtistName ORDER BY di.id",
                     map: (digitalBook, image, kind) =>
                     {
                         digitalBook.Image = image;
