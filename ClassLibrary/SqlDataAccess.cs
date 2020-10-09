@@ -17,7 +17,7 @@ namespace ClassLibrary
     {
         private readonly IConfiguration _config;
         private readonly ILogger<SqlDataAccess> _log;
-        public string ConnectionStringName { get; set; } = "Default";
+        public string ConnectionStringName { get; set; } = "DigitalBooks_Docker";
 
         public SqlDataAccess(IConfiguration config, ILogger<SqlDataAccess> log)
         {
