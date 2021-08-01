@@ -15,12 +15,12 @@ namespace ClassLibrary.Models
         }
         public string BorrowedDate
         {
-            get => StartDate.AddMilliseconds(Borrowed).ToLocalTime().ToShortDateString();
+            get => StartDate.AddMilliseconds(Borrowed).ToLocalTime().ToString("MM/dd/yyyy");
         }
 
         public string ReturnedDate
         {
-            get => StartDate.AddMilliseconds(Returned).ToLocalTime().ToShortDateString();
+            get => StartDate.AddMilliseconds(Returned).ToLocalTime().ToString("MM/dd/yyyy");
         }
     }
 }

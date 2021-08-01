@@ -77,13 +77,13 @@ namespace ClassLibrary
             // TODO: Sanitize user input string
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                var data = await connection.QueryAsync<DigitalBook, Image, Kind, DigitalBook>(getBooksQuery + " WHERE LEFT((di.ArtistName, @InputLength) = @ArtistName ORDER BY di.id",
+                var data = await connection.QueryAsync<DigitalBook, Image, Kind, DigitalBook>(getBooksQuery + " WHERE LEFT(di.ArtistName, @InputLength) = @ArtistName ORDER BY di.id",
                     map: (digitalBook, image, kind) =>
                     {
                         digitalBook.Image = image;
                         digitalBook.Kind = kind;
                         return digitalBook;
-                    }, new { artistName = authorName, InputLength = authorName.Length });
+                    }, new { ArtistName = authorName, InputLength = authorName.Length });
 
                 return data.ToList();
             }
@@ -94,7 +94,7 @@ namespace ClassLibrary
             string connectionString = _config.GetConnectionString(ConnectionStringName);
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                var data = await connection.QueryAsync<Borrow>("SELECT Borrowed, Returned FROM Borrows WHERE TitleId = @TitleId", new { TitleId = titleId });
+                var data = await connection.QueryAsync<Borrow>("SELECT Borrowed, Returned FROM Borrows WHERE TitleId = @TitleId ORDER BY Borrowed ASC", new { TitleId = titleId });
                 return data.ToList();
             }
         }
