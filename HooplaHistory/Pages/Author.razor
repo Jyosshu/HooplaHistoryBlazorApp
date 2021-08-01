@@ -1,0 +1,38 @@
+﻿@page "/Author/{ArtistName}"
+@inject ClassLibrary.ISqlDataAccess _db
+
+<h3>Author</h3>
+
+@if (digitalBooks is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in digitalBooks)
+            {
+                <tr>
+                    <td><a href="/Detail/@book.Id">@book.Title</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string ArtistName { get; set; }
+    private List<DigitalBook> digitalBooks = new List<DigitalBook>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        digitalBooks = await _db.GetBooksByAuthor(ArtistName);
+    }
+}

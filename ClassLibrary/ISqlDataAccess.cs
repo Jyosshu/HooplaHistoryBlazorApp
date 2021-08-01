@@ -6,6 +6,7 @@ namespace ClassLibrary
 {
     public interface ISqlDataAccess
     {
+        Task<List<Artist>> GetArtists();
         Task<DigitalBook> GetBookById(int bookId);
         Task<List<DigitalBook>> GetBooks();
         Task<List<DigitalBook>> GetBooksByAuthor(string authorName);

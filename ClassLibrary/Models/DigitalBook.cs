@@ -12,6 +12,7 @@ namespace ClassLibrary.Models
         public int KindId { get; set; }
         public string ArtistName { get; set; } // TODO: Refactor into List<Artists>?
         public string ArtKey { get; set; }
+        public string RemoteURL { get; set; }
 
         public Image Image { get; set; }
         public Kind Kind { get; set; }

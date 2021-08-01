@@ -1,0 +1,38 @@
+﻿@page "/Artists"
+@inject ClassLibrary.ISqlDataAccess _db
+
+<h3>Artists</h3>
+
+@if (artists is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Authors</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Artist a in artists)
+            {
+                <tr>
+                    <td>
+                        <a href="/Author/@a.ArtistName">@a.ArtistName</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Artist> artists = new List<Artist>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        artists = await _db.GetArtists();
+    }
+}

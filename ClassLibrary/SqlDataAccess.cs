@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
+using System.IO;
 
 namespace ClassLibrary
 {
@@ -16,12 +17,22 @@ namespace ClassLibrary
     {
         private readonly IConfiguration _config;
         private readonly ILogger<SqlDataAccess> _log;
-        public string ConnectionStringName { get; set; } = "Default";
+        public string ConnectionStringName { get; set; } = "DigitalBooks_Docker";
 
         public SqlDataAccess(IConfiguration config, ILogger<SqlDataAccess> log)
         {
             _config = config;
             _log = log;
+        }
+
+        public async Task<List<Artist>> GetArtists()
+        {
+            string connectionString = _config.GetConnectionString(ConnectionStringName);
+            using (IDbConnection connection = new SqlConnection(connectionString))
+            {
+                var data = await connection.QueryAsync<Artist>("SELECT * FROM Artist");
+                return data.ToList();
+            }
         }
 
         public async Task<List<DigitalBook>> GetBooks()
@@ -45,12 +56,14 @@ namespace ClassLibrary
         {
             try
             {
+                string remoteUrl = _config["RemoteUrl"];
                 string connectionString = _config.GetConnectionString(ConnectionStringName);
                 using (IDbConnection connection = new SqlConnection(connectionString))
                 {
                     var data = await connection.QueryAsync<DigitalBook, Image, Kind, DigitalBook>(getBooksQuery + " WHERE di.Id = @BookId",
                         map: (digitalBook, image, kind) =>
                         {
+                            digitalBook.RemoteURL = Path.Combine(remoteUrl, digitalBook.TitleId.ToString());
                             digitalBook.Image = image;
                             digitalBook.Kind = kind;
                             return digitalBook;
