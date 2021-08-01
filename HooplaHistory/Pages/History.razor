@@ -12,7 +12,14 @@ else
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Title</th>
+                <th> 
+                    <span class="sort-link" @onclick="@(() => SortTable("Title"))">Title</span>
+                    <span class="fa @(GetSortStyle("Title"))"></span>
+                </th>
+                <th>
+                    <span class="sort-link" @onclick="@(() => SortTable("ArtistName"))">Author</span>
+                    <span class="fa @(GetSortStyle("ArtistName"))"></span>
+                </th>
             </tr>
         </thead>
             <tbody>
@@ -20,6 +27,7 @@ else
                 {
                     <tr>
                         <td><a href="/Detail/@book.Id">@book.Title</a></td>
+                        <td><a href="/Artist/@book.ArtistName">@book.ArtistName</a></td>
                     </tr>
                 }
             </tbody>
@@ -27,10 +35,53 @@ else
 }
 
 @code {
-    private List<DigitalBook> digitalBooks = new List<DigitalBook>();
+    IList<DigitalBook> digitalBooks = new List<DigitalBook>();
+
+    private bool IsSortedAscending;
+    private string CurrentSortColumn;
 
     protected override async Task OnInitializedAsync()
     {
         digitalBooks = await _db.GetBooks();
+    }
+
+    private void SortTable(string columnName)
+    {
+        if (columnName != CurrentSortColumn)
+        {
+            digitalBooks = digitalBooks.OrderBy(x => x.GetType().GetProperty(columnName).GetValue(x, null)).ToList();
+
+            CurrentSortColumn = columnName;
+            IsSortedAscending = true;
+        }
+        else
+        {
+            if (IsSortedAscending)
+            {
+                digitalBooks = digitalBooks.OrderByDescending(x => x.GetType().GetProperty(columnName).GetValue(x, null)).ToList();
+            }
+            else
+            {
+                digitalBooks = digitalBooks.OrderBy(x => x.GetType().GetProperty(columnName).GetValue(x, null)).ToList();
+            }
+
+            IsSortedAscending = !IsSortedAscending;
+        }
+    }
+
+    private string GetSortStyle(string columnName)
+    {
+        if (CurrentSortColumn != columnName)
+        {
+            return string.Empty;
+        }
+        if (IsSortedAscending)
+        {
+            return "fa-sort-up";
+        }
+        else
+        {
+            return "fa-sort-down";
+        }
     }
 }

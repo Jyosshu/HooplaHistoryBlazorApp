@@ -30,7 +30,7 @@ namespace HooplaHistory
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<WeatherForecastService>(); // TODO: Remove the MS Weather Demo code.
             services.AddTransient<ISqlDataAccess, SqlDataAccess>();
         }
 

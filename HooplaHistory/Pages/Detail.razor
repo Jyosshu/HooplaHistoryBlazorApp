@@ -16,19 +16,34 @@ else
     <div class="d-inline-flex">
         <img src="@book.Image.RemoteUrl" title="@book.Image.AltText"  class="d-inline"/>
     </div>
-    <div class="d-inline-flex align-top">
-        <ul class="align-text-top" style="list-style-type: none">
-            <li class=" my-1">Author: @book.ArtistName</li>
-            <li class="my-1">Type: @book.Kind.Name</li>
-
-            @foreach (Borrow b in book.Borrows)
-            {
-                <li class="my-1">Borrowed: @b.BorrowedDate</li>
-                <li class="my-1">Returned: @b.ReturnedDate</li>
-            }
-
-        </ul>
+    <div  class="d-inline-flex align-top">
+        <div class="d-inline-flex align-top">
+            <ul class="align-text-top" style="list-style-type: none">
+                <li class=" my-1">Author: @book.ArtistName</li>
+                <li class="my-1">Type: @book.Kind.Name</li>
+            </ul>
+        </div>
+        <div class="d-block">
+            <table cellpadding="5" cellspacing="5">
+                <thead>
+                    <tr>
+                        <th>Borrowed</th>
+                        <th>Returned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Borrow b in book.Borrows)
+                    {
+                        <tr>
+                            <td>@b.BorrowedDate</td>
+                            <td>@b.ReturnedDate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </div>
 }
 
