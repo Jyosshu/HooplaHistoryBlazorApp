@@ -181,3 +181,35 @@ app {
         display: block;
     }
 }
+
+.book-container {
+    display: flex;
+}
+
+.image-container {
+    justify-self: center;
+    padding: 3px;
+}
+
+.image-container img {
+
+}
+
+.book-details-container {
+    display: flex;
+    padding: 3px;
+}
+
+.book-details-artists {
+
+}
+
+.book-details-borrows {
+
+}
+
+.sort-link {
+    cursor:pointer;
+    color: blue;
+    text-decoration:underline;
+}
